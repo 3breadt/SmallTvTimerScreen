@@ -19,7 +19,7 @@ using SmallTvTimerScreen.Data;
 [Route("[controller]")]
 public class TimerController : ControllerBase
 {
-    private readonly TimerService timerService;
+    private readonly ITimerService timerService;
     private readonly TimerImageGenerator timerImageGenerator;
 
     /// <summary>
@@ -27,7 +27,7 @@ public class TimerController : ControllerBase
     /// </summary>
     /// <param name="timerService">The timer service.</param>
     /// <param name="timerImageGenerator">The timer image generator.</param>
-    public TimerController(TimerService timerService, TimerImageGenerator timerImageGenerator)
+    public TimerController(ITimerService timerService, TimerImageGenerator timerImageGenerator)
     {
         this.timerService = timerService;
         this.timerImageGenerator = timerImageGenerator;

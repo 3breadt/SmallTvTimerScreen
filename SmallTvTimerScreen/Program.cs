@@ -21,6 +21,7 @@ builder.Services.AddHttpClient<SmallTvService>(httpClient =>
 });
 
 builder.Services.AddSingleton<TimerService>();
+builder.Services.AddSingleton<ITimerService>(sp => sp.GetRequiredService<TimerService>());
 builder.Services.AddHostedService(sp => sp.GetRequiredService<TimerService>());
 
 builder.Services.AddControllers();

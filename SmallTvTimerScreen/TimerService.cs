@@ -16,7 +16,7 @@ using SmallTvTimerScreen.Data;
 /// Manages the updating and displaying of timer images on the SmallTV device.
 /// </summary>
 /// <seealso cref="BackgroundService" />
-public sealed class TimerService : BackgroundService
+public sealed class TimerService : BackgroundService, ITimerService
 {
     private const string FileName = "timer.gif";
 
@@ -78,7 +78,8 @@ public sealed class TimerService : BackgroundService
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (await this.timerSetSignal.WaitAsync(cancellationToken))
+                await this.timerSetSignal.WaitAsync(stoppingToken);
+                if (this.IsTimerActive)
                 {
                     this.logger.LogTimerServiceNewTimerStarted(this.activeTimers.FirstOrDefault()?.Name ?? "Unnamed Timer");
                     await this.UpdateTimerImage(stoppingToken);
