@@ -17,7 +17,7 @@ This project provides a service to display active Alexa timers on a GeekMagic Sm
 
 1. Install [ASP.NET Core Runtime 8.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) on your server
 
-2. Download the latest release of TimerScreen from the [releases page](https://github.com/3breadt/timer-screen/releases/)
+2. Download the latest release of TimerScreen from the [releases page](https://github.com/3breadt/SmallTvTimerScreen/releases/)
 
 3. Unpack to /var/www/smalltv-timerscreen and grant read access to the www-data user.
    This assumes a www-data user already exist. Adjust as necessary for your system.
