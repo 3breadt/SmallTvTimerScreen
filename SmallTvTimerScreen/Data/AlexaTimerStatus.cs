@@ -10,6 +10,11 @@ namespace SmallTvTimerScreen.Data;
 public enum AlexaTimerStatus
 {
     /// <summary>
+    /// An unknown status.
+    /// </summary>
+    Unknown,
+
+    /// <summary>
     /// Timer is off.
     /// </summary>
     Off,

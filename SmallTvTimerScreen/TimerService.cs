@@ -21,11 +21,11 @@ public sealed class TimerService : BackgroundService
     private const string FileName = "timer.gif";
 
     private readonly TimerImageGenerator imageGenerator;
-    private readonly AutoResetEvent timerSetEvent = new(false);
+    private readonly SemaphoreSlim timerSetSignal = new(0, 1);
     private readonly SmallTvService smallTv;
     private readonly ILogger logger;
 
-    private List<NamedTimer> activeTimers = [];
+    private volatile List<NamedTimer> activeTimers = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TimerService"/> class.
@@ -48,29 +48,26 @@ public sealed class TimerService : BackgroundService
     /// <summary>
     /// Clears the active timers.
     /// </summary>
-    public void ClearTimers()
-    {
-        this.activeTimers = [];
-    }
+    public void ClearTimers() => this.SetTimers([]);
 
     /// <summary>
     /// Sets the active timers.
     /// </summary>
     /// <param name="timers">The timers.</param>
-    public void SetTimers(IEnumerable<NamedTimer> timers)
+    public void SetTimers(IList<NamedTimer> timers)
     {
-        var isUpdate = this.activeTimers.Count > 0;
-        this.activeTimers = [.. timers.OrderBy(t => t.End).ThenBy(t => t.Name)];
-        if (!isUpdate)
+        List<NamedTimer> newValue = [.. timers.OrderBy(t => t.End).ThenBy(t => t.Name)];
+        var previousValue = Interlocked.Exchange(ref this.activeTimers, newValue);
+        if (previousValue.Count == 0 && newValue.Count > 0)
         {
-            this.timerSetEvent.Set();
+            this.timerSetSignal.Release();
         }
     }
 
     /// <inheritdoc/>
     public override void Dispose()
     {
-        this.timerSetEvent.Dispose();
+        this.timerSetSignal.Dispose();
         base.Dispose();
     }
 
@@ -81,7 +78,7 @@ public sealed class TimerService : BackgroundService
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (await this.WaitForNewTimer(stoppingToken))
+                if (await this.timerSetSignal.WaitAsync(cancellationToken))
                 {
                     this.logger.LogTimerServiceNewTimerStarted(this.activeTimers.FirstOrDefault()?.Name ?? "Unnamed Timer");
                     await this.UpdateTimerImage(stoppingToken);
@@ -100,16 +97,14 @@ public sealed class TimerService : BackgroundService
                 }
             }
         }
-        catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested && this.IsTimerActive)
+        catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
         {
-            this.logger.LogTimerServiceStoppedWhileTimerActive();
-            await this.smallTv.SwitchToDefaultTheme(default);
+            if (this.IsTimerActive)
+            {
+                this.logger.LogTimerServiceStoppedWhileTimerActive();
+                await this.smallTv.SwitchToDefaultTheme(default);
+            }
         }
-    }
-
-    private Task<bool> WaitForNewTimer(CancellationToken cancellationToken)
-    {
-        return Task.Run(() => WaitHandle.WaitAny([this.timerSetEvent, cancellationToken.WaitHandle], 10_000) == 0 && this.IsTimerActive, cancellationToken);
     }
 
     private async Task UpdateTimerImage(CancellationToken cancellationToken)

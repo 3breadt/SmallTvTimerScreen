@@ -1,4 +1,4 @@
-// <copyright file="AlexaNextTimerValue.cs" company="Daniel Dreibrodt">
+// <copyright file="NextTimerAttributes.cs" company="Daniel Dreibrodt">
 // Copyright (c) Daniel Dreibrodt. All rights reserved.
 // </copyright>
 
