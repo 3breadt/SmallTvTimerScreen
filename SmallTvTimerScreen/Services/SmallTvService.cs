@@ -2,7 +2,7 @@
 // Copyright (c) Daniel Dreibrodt. All rights reserved.
 // </copyright>
 
-namespace SmallTvTimerScreen;
+namespace SmallTvTimerScreen.Services;
 
 using System.Net.Mime;
 using System.Web;
@@ -12,7 +12,7 @@ using SmallTvAlexaTimer;
 /// <summary>
 /// Service for controlling a GeekMagic SmallTV device.
 /// </summary>
-public class SmallTvService
+public class SmallTvService : ISmallTvService
 {
     /// <summary>
     /// Name of the configuration key for the SmallTV base URL.
@@ -43,11 +43,7 @@ public class SmallTvService
         this.logger = logger;
     }
 
-    /// <summary>
-    /// Switches the TV to the default theme.
-    /// </summary>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <inheritdoc />
     public async Task SwitchToDefaultTheme(CancellationToken cancellationToken)
     {
         try
@@ -60,11 +56,7 @@ public class SmallTvService
         }
     }
 
-    /// <summary>
-    /// Switches the TV to the photo album theme.
-    /// </summary>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <inheritdoc />
     public async Task SwitchToPhotoAlbum(CancellationToken cancellationToken)
     {
         try
@@ -77,13 +69,7 @@ public class SmallTvService
         }
     }
 
-    /// <summary>
-    /// Uploads an image to the photo album.
-    /// </summary>
-    /// <param name="fileName">Name of the file.</param>
-    /// <param name="data">The data.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <inheritdoc />
     public async Task UploadImage(string fileName, byte[] data, CancellationToken cancellationToken)
     {
         try
@@ -111,12 +97,7 @@ public class SmallTvService
         }
     }
 
-    /// <summary>
-    /// Shows an image from the photo album.
-    /// </summary>
-    /// <param name="fileName">Name of the file.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <inheritdoc />
     public async Task ShowImage(string fileName, CancellationToken cancellationToken)
     {
         try
@@ -129,12 +110,7 @@ public class SmallTvService
         }
     }
 
-    /// <summary>
-    /// Deletes an image from the photo album.
-    /// </summary>
-    /// <param name="fileName">Name of the file.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <inheritdoc />
     public async Task DeleteImage(string fileName, CancellationToken cancellationToken)
     {
         try
@@ -147,11 +123,7 @@ public class SmallTvService
         }
     }
 
-    /// <summary>
-    /// Deletes all images from the photo album.
-    /// </summary>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <inheritdoc />
     public async Task DeleteAllImages(CancellationToken cancellationToken)
     {
         try

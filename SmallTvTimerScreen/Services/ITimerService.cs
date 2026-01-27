@@ -2,7 +2,7 @@
 // Copyright (c) Daniel Dreibrodt. All rights reserved.
 // </copyright>
 
-namespace SmallTvTimerScreen;
+namespace SmallTvTimerScreen.Services;
 
 using SmallTvTimerScreen.Data;
 

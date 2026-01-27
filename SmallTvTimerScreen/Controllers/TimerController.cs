@@ -8,8 +8,8 @@ using System.Net.Mime;
 
 using Microsoft.AspNetCore.Mvc;
 
-using SmallTvTimerScreen;
 using SmallTvTimerScreen.Data;
+using SmallTvTimerScreen.Services;
 
 /// <summary>
 /// API controller for managing Alexa timers.
@@ -20,14 +20,14 @@ using SmallTvTimerScreen.Data;
 public class TimerController : ControllerBase
 {
     private readonly ITimerService timerService;
-    private readonly TimerImageGenerator timerImageGenerator;
+    private readonly ITimerImageGenerator timerImageGenerator;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TimerController"/> class.
     /// </summary>
     /// <param name="timerService">The timer service.</param>
     /// <param name="timerImageGenerator">The timer image generator.</param>
-    public TimerController(ITimerService timerService, TimerImageGenerator timerImageGenerator)
+    public TimerController(ITimerService timerService, ITimerImageGenerator timerImageGenerator)
     {
         this.timerService = timerService;
         this.timerImageGenerator = timerImageGenerator;

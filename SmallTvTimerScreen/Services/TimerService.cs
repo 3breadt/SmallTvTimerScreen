@@ -2,7 +2,7 @@
 // Copyright (c) Daniel Dreibrodt. All rights reserved.
 // </copyright>
 
-namespace SmallTvTimerScreen;
+namespace SmallTvTimerScreen.Services;
 
 using System.Diagnostics;
 using System.Threading;
@@ -20,11 +20,10 @@ public sealed class TimerService : BackgroundService, ITimerService
 {
     private const string FileName = "timer.gif";
 
-    private readonly TimerImageGenerator imageGenerator;
-    private readonly SemaphoreSlim timerSetSignal = new(0, 1);
-    private readonly SmallTvService smallTv;
+    private readonly ITimerImageGenerator imageGenerator;
+    private readonly ISmallTvService smallTv;
     private readonly ILogger logger;
-
+    private readonly SemaphoreSlim timerSetSignal = new(0, 1);
     private volatile List<NamedTimer> activeTimers = [];
 
     /// <summary>
@@ -33,7 +32,7 @@ public sealed class TimerService : BackgroundService, ITimerService
     /// <param name="imageGenerator">The image generator.</param>
     /// <param name="smallTv">The small tv.</param>
     /// <param name="logger">The logger.</param>
-    public TimerService(TimerImageGenerator imageGenerator, SmallTvService smallTv, ILogger<TimerService> logger)
+    public TimerService(ITimerImageGenerator imageGenerator, ISmallTvService smallTv, ILogger<TimerService> logger)
     {
         this.imageGenerator = imageGenerator;
         this.smallTv = smallTv;

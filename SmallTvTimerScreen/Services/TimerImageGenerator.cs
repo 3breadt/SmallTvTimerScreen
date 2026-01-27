@@ -2,7 +2,7 @@
 // Copyright (c) Daniel Dreibrodt. All rights reserved.
 // </copyright>
 
-namespace SmallTvTimerScreen;
+namespace SmallTvTimerScreen.Services;
 
 using Microsoft.Extensions.Options;
 
@@ -13,13 +13,14 @@ using SixLabors.ImageSharp.Processing.Processors.Quantization;
 
 using SkiaSharp;
 
+using SmallTvTimerScreen;
 using SmallTvTimerScreen.Data;
 
 /// <summary>
 /// Generates timer images for display on the SmallTV device.
 /// </summary>
 /// <seealso cref="IDisposable" />
-public sealed class TimerImageGenerator : IDisposable
+public sealed class TimerImageGenerator : ITimerImageGenerator, IDisposable
 {
     private const int Height = 240;
     private const int Width = 240;
