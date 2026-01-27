@@ -1,0 +1,123 @@
+﻿// <copyright file="TimerService.cs" company="Daniel Dreibrodt">
+// Copyright (c) Daniel Dreibrodt. All rights reserved.
+// </copyright>
+
+namespace SmallTvTimerScreen;
+
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+
+using SmallTvAlexaTimer;
+
+using SmallTvTimerScreen.Data;
+
+/// <summary>
+/// Manages the updating and displaying of timer images on the SmallTV device.
+/// </summary>
+/// <seealso cref="BackgroundService" />
+public sealed class TimerService : BackgroundService
+{
+    private const string FileName = "timer.gif";
+
+    private readonly TimerImageGenerator imageGenerator;
+    private readonly AutoResetEvent timerSetEvent = new(false);
+    private readonly SmallTvService smallTv;
+    private readonly ILogger logger;
+
+    private List<NamedTimer> activeTimers = [];
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TimerService"/> class.
+    /// </summary>
+    /// <param name="imageGenerator">The image generator.</param>
+    /// <param name="smallTv">The small tv.</param>
+    /// <param name="logger">The logger.</param>
+    public TimerService(TimerImageGenerator imageGenerator, SmallTvService smallTv, ILogger<TimerService> logger)
+    {
+        this.imageGenerator = imageGenerator;
+        this.smallTv = smallTv;
+        this.logger = logger;
+    }
+
+    /// <summary>
+    /// Gets a value indicating whether a timer is currently active.
+    /// </summary>
+    public bool IsTimerActive => this.activeTimers.Count > 0;
+
+    /// <summary>
+    /// Clears the active timers.
+    /// </summary>
+    public void ClearTimers()
+    {
+        this.activeTimers = [];
+    }
+
+    /// <summary>
+    /// Sets the active timers.
+    /// </summary>
+    /// <param name="timers">The timers.</param>
+    public void SetTimers(IEnumerable<NamedTimer> timers)
+    {
+        var isUpdate = this.activeTimers.Count > 0;
+        this.activeTimers = [.. timers.OrderBy(t => t.End).ThenBy(t => t.Name)];
+        if (!isUpdate)
+        {
+            this.timerSetEvent.Set();
+        }
+    }
+
+    /// <inheritdoc/>
+    public override void Dispose()
+    {
+        this.timerSetEvent.Dispose();
+        base.Dispose();
+    }
+
+    /// <inheritdoc/>
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        try
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                if (await this.WaitForNewTimer(stoppingToken))
+                {
+                    this.logger.LogTimerServiceNewTimerStarted(this.activeTimers.FirstOrDefault()?.Name ?? "Unnamed Timer");
+                    await this.UpdateTimerImage(stoppingToken);
+                    await this.smallTv.ShowImage(FileName, stoppingToken);
+                    await this.smallTv.SwitchToPhotoAlbum(stoppingToken);
+
+                    using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+                    while (this.IsTimerActive)
+                    {
+                        await timer.WaitForNextTickAsync(stoppingToken);
+                        await this.UpdateTimerImage(stoppingToken);
+                    }
+
+                    await this.smallTv.SwitchToDefaultTheme(stoppingToken);
+                    this.logger.LogTimerServiceTimersEnded();
+                }
+            }
+        }
+        catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested && this.IsTimerActive)
+        {
+            this.logger.LogTimerServiceStoppedWhileTimerActive();
+            await this.smallTv.SwitchToDefaultTheme(default);
+        }
+    }
+
+    private Task<bool> WaitForNewTimer(CancellationToken cancellationToken)
+    {
+        return Task.Run(() => WaitHandle.WaitAny([this.timerSetEvent, cancellationToken.WaitHandle], 10_000) == 0 && this.IsTimerActive, cancellationToken);
+    }
+
+    private async Task UpdateTimerImage(CancellationToken cancellationToken)
+    {
+        var sw = Stopwatch.StartNew();
+        var jpeg = this.imageGenerator.CreateTimerImageAsGif(this.activeTimers);
+        await this.smallTv.UploadImage(FileName, jpeg, cancellationToken);
+        sw.Stop();
+        this.logger.LogTimerServiceImageUpdateDuration(sw.ElapsedMilliseconds);
+    }
+}

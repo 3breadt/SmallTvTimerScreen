@@ -1,0 +1,198 @@
+@SmallTvAlexaTimer_HostAddress = http://localhost:5037
+#http://ramoth/smalltv
+#http://localhost:5037
+
+POST {{SmallTvAlexaTimer_HostAddress}}/timer/update
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Mein Test Timer",
+  "end": "2025-10-22T18:45:00+02:00"
+}
+
+###
+
+POST {{SmallTvAlexaTimer_HostAddress}}/timer/update
+Accept: application/json
+Content-Type: application/json
+
+{
+}
+
+###
+
+GET {{SmallTvAlexaTimer_HostAddress}}/timer/test
+
+###
+
+POST {{SmallTvAlexaTimer_HostAddress}}/timer/nexttimer
+Accept: application/json
+Content-Type: application/json
+{
+  "brief": {
+    "active": [
+      {
+        "id": "A4ZXE0RM7LQ7A-G0922J06520608FL-b071e069-943d-32f8-9b6d-a2119854637e",
+        "label": "Test",
+        "lastUpdatedDate": 1769530278254,
+        "remainingTime": 299000.0,
+        "status": "ON",
+        "type": "Timer",
+        "version": "3"
+      }
+    ],
+    "all": [
+      {
+        "id": "A4ZXE0RM7LQ7A-G0922J06520608FL-b071e069-943d-32f8-9b6d-a2119854637e",
+        "label": "Test",
+        "lastUpdatedDate": 1769530278254,
+        "remainingTime": 299000.0,
+        "status": "ON",
+        "type": "Timer",
+        "version": "3"
+      }
+    ]
+  },
+  "device_class": "timestamp",
+  "dismissed": null,
+  "friendly_name": "Echo Dot K\u00fcche next Timer",
+  "icon": "mdi:timer-outline",
+  "prior_value": null,
+  "process_timestamp": "2026-01-27T17:11:18.458249+01:00",
+  "recurrence": "Never Repeat",
+  "sorted_active": [
+    {
+      "alarmLabel": null,
+      "alarmTime": 0,
+      "assigner": null,
+      "automationId": null,
+      "createdDate": 1769530277766,
+      "deferredAtTime": null,
+      "deliveryMetadata": null,
+      "deliveryType": null,
+      "deviceName": null,
+      "deviceSerialNumber": "G0922J06520608FL",
+      "deviceType": "A4ZXE0RM7LQ7A",
+      "extensibleAttribute": null,
+      "followUpMetadata": null,
+      "geoLocationTriggerData": null,
+      "id": "A4ZXE0RM7LQ7A-G0922J06520608FL-b071e069-943d-32f8-9b6d-a2119854637e",
+      "instanceState": null,
+      "lastOccurrenceTimeInMilli": 0,
+      "lastTriggerTimeInUtc": null,
+      "lastUpdatedDate": 1769530278254,
+      "loopCount": null,
+      "mrmGroupContext": null,
+      "musicAlarmId": null,
+      "musicEntity": null,
+      "notificationIndex": "b071e069-943d-32f8-9b6d-a2119854637e",
+      "originalDate": null,
+      "originalDurationInMillis": 300000,
+      "originalTime": null,
+      "personProfile": null,
+      "primaryDeviceState": null,
+      "provider": null,
+      "rRuleData": null,
+      "recurrenceEligibility": false,
+      "recurringPattern": null,
+      "remainingTime": 299000.0,
+      "reminderAppLabel": null,
+      "reminderLabel": null,
+      "reminderSubLabel": null,
+      "showDeregisteredWarning": null,
+      "skillInfo": null,
+      "sleepTrackingAlarmProperties": null,
+      "snoozedToTime": null,
+      "sound": {
+        "displayName": "Simple Timer",
+        "folder": null,
+        "id": "system_alerts_melodic_02",
+        "isChildDirected": false,
+        "numAssets": 0,
+        "pricing": null,
+        "providerId": "ECHO",
+        "sampleUrl": "https://s3.amazonaws.com/deeappservice.prod.notificationtones/system_alerts_melodic_02.mp3",
+        "sampleVideoUrl": null,
+        "skillUrl": null
+      },
+      "status": "ON",
+      "targetPersonProfiles": null,
+      "taskMetadata": null,
+      "timeZoneId": null,
+      "timerLabel": "Test",
+      "tmwNotificationProperties": null,
+      "triggerTime": 1769530577751,
+      "type": "Timer",
+      "version": "3"
+    }
+  ],
+  "sorted_all": [
+    {
+      "alarmLabel": null,
+      "alarmTime": 0,
+      "assigner": null,
+      "automationId": null,
+      "createdDate": 1769530277766,
+      "deferredAtTime": null,
+      "deliveryMetadata": null,
+      "deliveryType": null,
+      "deviceName": null,
+      "deviceSerialNumber": "G0922J06520608FL",
+      "deviceType": "A4ZXE0RM7LQ7A",
+      "extensibleAttribute": null,
+      "followUpMetadata": null,
+      "geoLocationTriggerData": null,
+      "id": "A4ZXE0RM7LQ7A-G0922J06520608FL-b071e069-943d-32f8-9b6d-a2119854637e",
+      "instanceState": null,
+      "lastOccurrenceTimeInMilli": 0,
+      "lastTriggerTimeInUtc": null,
+      "lastUpdatedDate": 1769530278254,
+      "loopCount": null,
+      "mrmGroupContext": null,
+      "musicAlarmId": null,
+      "musicEntity": null,
+      "notificationIndex": "b071e069-943d-32f8-9b6d-a2119854637e",
+      "originalDate": null,
+      "originalDurationInMillis": 300000,
+      "originalTime": null,
+      "personProfile": null,
+      "primaryDeviceState": null,
+      "provider": null,
+      "rRuleData": null,
+      "recurrenceEligibility": false,
+      "recurringPattern": null,
+      "remainingTime": 299000.0,
+      "reminderAppLabel": null,
+      "reminderLabel": null,
+      "reminderSubLabel": null,
+      "showDeregisteredWarning": null,
+      "skillInfo": null,
+      "sleepTrackingAlarmProperties": null,
+      "snoozedToTime": null,
+      "sound": {
+        "displayName": "Simple Timer",
+        "folder": null,
+        "id": "system_alerts_melodic_02",
+        "isChildDirected": false,
+        "numAssets": 0,
+        "pricing": null,
+        "providerId": "ECHO",
+        "sampleUrl": "https://s3.amazonaws.com/deeappservice.prod.notificationtones/system_alerts_melodic_02.mp3",
+        "sampleVideoUrl": null,
+        "skillUrl": null
+      },
+      "status": "ON",
+      "targetPersonProfiles": null,
+      "taskMetadata": null,
+      "timeZoneId": null,
+      "timerLabel": "Test",
+      "tmwNotificationProperties": null,
+      "triggerTime": 1769530577751,
+      "type": "Timer",
+      "version": "3"
+    }
+  ],
+  "status": "ON",
+  "timer": "Test"
+}
