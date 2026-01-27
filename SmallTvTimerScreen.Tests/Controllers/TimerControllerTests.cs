@@ -14,19 +14,14 @@ using Shouldly;
 
 using SmallTvTimerScreen.Controllers;
 using SmallTvTimerScreen.Data;
+using SmallTvTimerScreen.Services;
 
-/// <summary>
-/// Unit tests for the <see cref="TimerController"/> class.
-/// </summary>
 [TestFixture]
 public class TimerControllerTests
 {
     private ITimerService timerService = null!;
     private TimerController controller = null!;
 
-    /// <summary>
-    /// Sets up the test fixtures before each test.
-    /// </summary>
     [SetUp]
     public void SetUp()
     {
@@ -34,9 +29,6 @@ public class TimerControllerTests
         this.controller = new TimerController(this.timerService, null!);
     }
 
-    /// <summary>
-    /// Tests that NextTimer returns Ok when called with valid timer data.
-    /// </summary>
     [Test]
     public void NextTimer_WithActiveTimers_ReturnsOkAndSetsTimers()
     {
@@ -81,9 +73,6 @@ public class TimerControllerTests
             .MustHaveHappenedOnceExactly();
     }
 
-    /// <summary>
-    /// Tests that NextTimer clears timers when no active timers are provided.
-    /// </summary>
     [Test]
     public void NextTimer_WithNoActiveTimers_ReturnsOkAndClearsTimers()
     {
@@ -106,9 +95,6 @@ public class TimerControllerTests
         A.CallTo(() => this.timerService.SetTimers(A<IList<NamedTimer>>._)).MustNotHaveHappened();
     }
 
-    /// <summary>
-    /// Tests that NextTimer clears timers when AlarmsBrief is null.
-    /// </summary>
     [Test]
     public void NextTimer_WithNullAlarmsBrief_ReturnsOkAndClearsTimers()
     {
@@ -127,9 +113,6 @@ public class TimerControllerTests
         A.CallTo(() => this.timerService.ClearTimers()).MustHaveHappenedOnceExactly();
     }
 
-    /// <summary>
-    /// Tests that timer end times are calculated correctly based on process timestamp and remaining time.
-    /// </summary>
     [Test]
     public void NextTimer_CalculatesEndTimeCorrectly()
     {
@@ -168,9 +151,6 @@ public class TimerControllerTests
         capturedTimers[0].End.ShouldBe(expectedEndTime);
     }
 
-    /// <summary>
-    /// Tests that timers are ordered by remaining time.
-    /// </summary>
     [Test]
     public void NextTimer_OrdersTimersByRemainingTime()
     {
