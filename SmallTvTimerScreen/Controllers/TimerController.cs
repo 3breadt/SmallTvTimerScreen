@@ -52,7 +52,7 @@ public class TimerController : ControllerBase
                 End = referenceTime.Add(TimeSpan.FromMilliseconds(t.RemainingTime)),
             })
             .ToList();
-        if (activeTimers?.Count > 0)
+        if (activeTimers.Count > 0)
         {
             this.timerService.SetTimers(activeTimers);
         }

@@ -42,7 +42,7 @@ public sealed class TimerService : BackgroundService, ITimerService
     /// <summary>
     /// Gets a value indicating whether a timer is currently active.
     /// </summary>
-    public bool IsTimerActive => this.activeTimers.Count > 0;
+    public bool IsTimerActive => this.activeTimers.Any(t => t.IsActive);
 
     /// <summary>
     /// Clears the active timers.
@@ -57,7 +57,7 @@ public sealed class TimerService : BackgroundService, ITimerService
     {
         List<NamedTimer> newValue = [.. timers.OrderBy(t => t.End).ThenBy(t => t.Name)];
         var previousValue = Interlocked.Exchange(ref this.activeTimers, newValue);
-        if (previousValue.Count == 0 && newValue.Count > 0)
+        if (!previousValue.Any(t => t.IsActive) && newValue.Any(t => t.IsActive))
         {
             this.timerSetSignal.Release();
         }

@@ -20,6 +20,11 @@ public class NamedTimer
     public DateTimeOffset End { get; set; }
 
     /// <summary>
+    /// Gets a value indicating whether the timer is still running or has ended less than 10 seconds ago.
+    /// </summary>
+    public bool IsActive => DateTimeOffset.Now < this.End.AddSeconds(10);
+
+    /// <summary>
     /// Gets the remaining time.
     /// </summary>
     public TimeSpan RemainingTime
